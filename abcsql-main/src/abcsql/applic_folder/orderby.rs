@@ -1,5 +1,5 @@
 use gluesql::Row;
-use sqlparser::ast::{Expr::*, OrderByExpr, Value};
+// use sqlparser::ast::{Expr::*, Value};
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 use std::rc::Rc;
@@ -78,7 +78,7 @@ impl Iterator for ABinaryHeap {
 pub fn orderby(
     labels: Vec<String>,
     rows_in: Vec<Row>,
-    order_by: &Vec<OrderByExpr>,
+    order_by: &Vec<gluesql::parser::ast::OrderByExpr>,
 ) -> std::vec::Vec<gluesql::Row> {
     let mut mother_the_binary_heap = ABinaryHeap {
         the_heap: BinaryHeap::new(),
@@ -93,21 +93,21 @@ pub fn orderby(
     let mother_order_by_all: Vec<OrderByAndCompare> = order_by
         .iter()
         .map(|one_order_by| {
-            let OrderByExpr {
+            let gluesql::parser::ast::OrderByExpr {
                 expr,
                 asc,
                 nulls_first: _,
             } = one_order_by;
             let colnumber = match expr {
-                Identifier(ident) => {
+                gluesql::parser::ast::Expr::Identifier(ident) => {
                     let index = labels
                         .iter()
                         .position(|r| &**r == ident.value)
                         .expect("columnname not found");
                     index
                 }
-                Value(column_number) => match column_number {
-                    Value::Number(thevale) => {
+                gluesql::parser::ast::Expr::Value(column_number) => match column_number {
+                    gluesql::parser::ast::Value::Number(thevale, _) => {
                         let my_int: usize = thevale.parse().expect("Order by must be an integer");
                         my_int - 1
                     }

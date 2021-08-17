@@ -119,3 +119,9 @@ select * from S order by CITY DESC,3
 
 here >
 ```
+
+
+### update log
+
+* update the dependency to 0.7. 2021-08-17
+* add windows support 2021-08-17

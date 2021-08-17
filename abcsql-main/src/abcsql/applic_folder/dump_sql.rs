@@ -24,7 +24,7 @@ pub fn dump_sql(my_input: &TheInput, seen: &Seen) -> std::io::Result<()> {
     let the_file_name = my_input.sql_filename.as_ref().unwrap();
     let mut file = File::create(the_file_name)?;
     for query in parse(&sql).unwrap() {
-        match &glue.execute(&query).unwrap() {
+        match &glue.execute(&query.to_string()).unwrap() {
             Select { labels, rows } => {
                 /*********************************************************/
                 let build_create_table = || {
@@ -75,7 +75,7 @@ CREATE TABLE S ({allcolls});
                                 Value::Str(ref s) => format!("\"{}\"", s.to_string()),
                                 Value::F64(ref f) => format!("{:?}", f),
                                 Value::I64(ref i) => format!("{:?}", i),
-                                Value::Empty => "null".to_string(),
+                                Value::Null => "null".to_string(),
                                 _ => "notyet".to_string(),
                             };
                             a_print_col

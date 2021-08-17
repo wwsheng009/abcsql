@@ -88,7 +88,7 @@ pub fn dump_csv(my_input: &TheInput, _seen: &Seen) -> std::io::Result<()> {
     let storage = get_storage(how);
     let mut glue = Glue::new(storage);
     for query in parse(&sql).unwrap() {
-        match &glue.execute(&query).unwrap() {
+        match &glue.execute(&query.to_string()).unwrap() {
             Select { labels, rows } => {
                 let mut wtr = csv::WriterBuilder::new()
                     .has_headers(true)
@@ -110,7 +110,7 @@ pub fn dump_csv(my_input: &TheInput, _seen: &Seen) -> std::io::Result<()> {
                                 Value::Str(ref s) => s.to_string(),
                                 Value::F64(ref f) => format!("{:?}", f),
                                 Value::I64(ref i) => format!("{:?}", i),
-                                Value::Empty => "null".to_string(),
+                                Value::Null => "null".to_string(),
                                 _ => "notyet".to_string(),
                             };
                             a_print_col

@@ -17,14 +17,20 @@ pub fn go_talk(how: HowToOpenStorage, seen: &Seen) {
                     if length <= 1 {
                         break 'collect_statement;
                     }
-                    if each_input.ends_with(";\n") {
-                        let last_input = each_input.trim_end_matches(";\n");
+                    let mut sep = ";\n";
+                    if cfg!(windows) {
+                        sep = ";\r\n";
+                    };
+                    if each_input.ends_with(sep) {
+                        let last_input = each_input.trim_end_matches(sep);
                         total_input.push(last_input.to_string());
                         total_input.push(";".to_string());
                         eprintln!("{:?}", total_input.join(" "));
                         go_exec(x_how.clone(), total_input.join(" "), seen);
                         break 'collect_statement;
                     } else {
+                        // println!(r";\n\r{:#?}", ";\n\r".as_bytes());
+                        // println!("each_input;{:#?}", each_input.as_bytes());
                         total_input.push(each_input.trim().to_string());
                         print!("         > ");
                         io::stdout().flush().unwrap();

@@ -23,7 +23,7 @@ pub fn show_select(labels: Vec<String>, rows: Vec<Row>, show_sql: Option<&str>) 
                         Value::Str(ref s) => s.to_string(),
                         Value::F64(ref f) => format!("{:?}", f),
                         Value::I64(ref i) => format!("{:?}", i),
-                        Value::Empty => "null".to_string(),
+                        Value::Null => "null".to_string(),
                         _ => "notyet".to_string(),
                     };
                     x

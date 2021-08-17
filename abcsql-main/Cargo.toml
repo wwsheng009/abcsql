@@ -7,13 +7,14 @@ edition = "2018"
 # https://stackoverflow.com/questions/27632660/how-do-i-use-conditional-compilation-with-cfg-and-cargo
 
 [dependencies]
-gluesql  = {version="0.3"}
+gluesql  = {version="0.7.0"}
 csv="1.1"
-sqlparser = { version = "0.6.1", features = ["serde"] }
+# sqlparser = { version = "0.9", features = ["serde"] }
 
 [features]
+default = ["sled-storage"]
 sled-storage=[]
 
 [[bin]]
-name="abcsql"
+name="abc_sql"
 path="src/abcsql/main.rs"
